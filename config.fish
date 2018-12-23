@@ -27,9 +27,10 @@ alias dv='docker volume ls'
 alias dc="docker-compose"
 
 alias k='kubectl'
+alias ksys='k get pod --namespace kube-system'
+alias kall='k get --all-namespaces'
 alias ktx='kubectx'
 alias kns='kubens'
-alias ksys='k get pod --namespace kube-system'
 alias ktl='kubetail'
 
 function manopt
