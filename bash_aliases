@@ -10,7 +10,7 @@ alias .....="cd ../../../.."
 
 alias h='history'
 alias a='bat'
-alias l='ls -lrth'
+alias l='ls -lrthp'
 alias tre='tree -L 2'
 alias s='git status'
 alias dif='git diff'
@@ -25,8 +25,8 @@ alias dv='docker volume ls'
 alias dc="docker-compose"
 
 alias k='kubectl'
-alias ksys='k get pod --namespace kube-system'
-alias kall='k get --all-namespaces'
 alias ktx='kubectx'
 alias kns='kubens'
 alias ktl='kubetail'
+alias ksys='k get --namespace kube-system'
+alias kall='k get --all-namespaces'
