@@ -6,13 +6,16 @@ alias .....="cd ../../../.."
 
 alias h='history'
 alias a='bat'
+alias r='ranger'
 alias l='ls -lrthp'
 alias tre='tree -L 2'
 alias grid='exa --recurse -L 2 -l --grid'
 alias s='git status'
-alias dif='git diff'
 alias publicip='curl ipinfo.io/ip'
+
+alias dif='git diff'
 alias gld='git log --pretty=format:%cd --date=short | uniq -c'
+alias gac='git add . && git commit -m'
 
 alias dps='docker ps --all --format "table {{.Names}}\t{{.Status}}\t{{.Image}}\t{{.Ports}}"'
 alias di='docker images'
