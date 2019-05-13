@@ -6,13 +6,14 @@ alias .....="cd ../../../.."
 
 alias h='history'
 alias a='bat'
+alias g='/usr/local/bin/s'
 alias r='ranger'
 alias l='ls -lrthp'
 alias tre='tree -L 2'
 alias grid='exa --recurse -L 2 -l --grid'
 alias publicip='curl ipinfo.io/ip'
 
-alias gs='git status'
+alias s='git status'
 alias dif='git diff'
 alias gld='git log --pretty=format:%cd --date=short | uniq -c'
 alias gac='git add . && git commit -m'
