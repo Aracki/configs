@@ -13,7 +13,7 @@ alias tre='tree -L 2'
 alias grid='exa --recurse -L 2 -l --grid'
 alias publicip='curl ipinfo.io/ip'
 
-alias s='git status'
+alias gs='git status'
 alias dif='git diff'
 alias gld='git log --pretty=format:%cd --date=short | uniq -c'
 alias gac='git add . && git commit -m'
