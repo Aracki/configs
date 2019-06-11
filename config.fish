@@ -2,8 +2,9 @@ export GOROOT=/usr/local/go
 export GOPATH=/Users/Raca/go
 export GOBIN=$GOPATH/bin
 
-. ~/.servers
+set -gx PATH $GOBIN $PATH
 
+. ~/.servers
 . ~/.aliases
 
 [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
