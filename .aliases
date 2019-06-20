@@ -15,6 +15,9 @@ alias publicip='curl ipinfo.io/ip'
 
 alias gs='git status'
 alias dif='git diff'
+alias br='git branch -av'
+alias gl="git log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'"
+alias gll='git log --stat --abbrev-commit'
 alias gld='git log --pretty=format:%cd --date=short | uniq -c'
 alias gac='git add . && git commit -m'
 
@@ -36,3 +39,4 @@ alias kgp='k get po'
 alias kgs='k get svc'
 alias dp='describepod'
 alias tp='tailpod'
+alias ep='execpod'
