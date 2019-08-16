@@ -13,8 +13,10 @@ alias l='ls -lrthp'
 alias tre='exa --long --tree'
 alias grid='exa --recurse -L 2 -l --grid'
 alias publicip='curl ipinfo.io/ip'
+alias localip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
 alias ap='ansible-playbook'
 alias bs='base64 --decode'
+alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
 
 # GIT
 alias gs='git status'
