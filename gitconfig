@@ -1,10 +1,5 @@
-[alias]
-	plom = pull origin master
-	br = branch -av
-	s = status
-	d = diff
-	l = log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'
-	ll = log --stat --abbrev-commit	
+[url "git@github.com:"]
+	insteadOf = https://github.com/
 [user]
-	name = Aracki
+	name = Ivan Aracki
 	email = aracki.ivan@gmail.com
