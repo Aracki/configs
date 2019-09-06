@@ -8,6 +8,7 @@ Make sure the files have proper PATH:
 * `~/.bash_aliases`
 * `~/.config/fish/config.fish`
 * `~/.config/fish/completions/`
+* `~/.config/fish/fish-kube-prompt/__kube_prompt.fish`
 * `~/.gitconfig`
 * `~/.servers`
 
