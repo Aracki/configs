@@ -42,6 +42,7 @@ alias dc="docker-compose"
 # KUBERNETES
 alias k='kubectl'
 alias ktx='kubectx'
+alias kx='ktx -'
 alias kns='kubens'
 alias ktl='kubetail'
 alias ksys='k get --namespace kube-system'
@@ -52,7 +53,6 @@ alias kgs='k get svc'
 alias kgi='k get ing'
 alias kgd='k get deploy'
 alias kpf='k port-forward'
-alias kev='k get ev -w'
 alias kgsm='k get servicemonitor'
 alias kgpr='k get prometheusrule'
 alias dp='describepod'
@@ -60,3 +60,7 @@ alias tp='tailpod'
 alias ep='execpod'
 alias rbac='rbac-lookup'
 alias kbox='kubectl run --generator=run-pod/v1 busybox --image=radial/busyboxplus:curl -i --tty --rm'
+
+function kev
+    kubectl get events  --sort-by='.metadata.creationTimestamp'  -o 'go-template={{range .items}}{{.involvedObject.name}}{{"\t"}}{{.involvedObject.kind}}{{"\t"}}{{.message}}{{"\t"}}{{.reason}}{{"\t"}}{{.type}}{{"\t"}}{{.firstTimestamp}}{{"\n"}}{{end}}'
+end
