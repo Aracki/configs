@@ -55,11 +55,16 @@ alias kgd='k get deploy'
 alias kpf='k port-forward'
 alias kgsm='k get servicemonitor'
 alias kgpr='k get prometheusrule'
+alias kgsl='k get servicelevel'
 alias dp='describepod'
 alias tp='tailpod'
 alias ep='execpod'
 alias rbac='rbac-lookup'
 alias kbox='kubectl run --generator=run-pod/v1 busybox --image=radial/busyboxplus:curl -i --tty --rm'
+
+function kla
+  stern -l app=$argv |sed -E -l 's/([^ ]+ )([^ ]+ ){(.*)/{\"pod\":\"\1\",\3/'|grep --line-buffered '^{'| jq  '.pod + " " + .apptime + " " + .severity + " " +  .message'
+end
 
 function kev
     kubectl get events  --sort-by='.metadata.creationTimestamp'  -o 'go-template={{range .items}}{{.involvedObject.name}}{{"\t"}}{{.involvedObject.kind}}{{"\t"}}{{.message}}{{"\t"}}{{.reason}}{{"\t"}}{{.type}}{{"\t"}}{{.firstTimestamp}}{{"\n"}}{{end}}'
