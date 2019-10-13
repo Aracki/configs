@@ -12,6 +12,11 @@ Make sure the files have proper PATH:
 * `~/.gitconfig`
 * `~/.servers`
 
+## KubePS custom colors
+
+* `set -Ux KUBE_PROMPT_COLOR_CTX white`
+* `set -Ux KUBE_PROMPT_COLOR_NS c79e85`
+
 ### For smart bash autocompletion:
 ```
 # If ~./inputrc doesn't exist yet, first include the original /etc/inputrc so we don't override it
