@@ -29,7 +29,6 @@ alias gl="git log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(w
 alias gll='git log --stat --abbrev-commit'
 alias gld='git log --pretty=format:%cd --date=short | uniq -c'
 alias gac='git add . && git commit -m'
-alias gpl='git pull origin master'
 
 # DOCKER
 alias dps='docker ps --all --format "table {{.Names}}\t{{.Status}}\t{{.Image}}\t{{.Ports}}"'
@@ -62,8 +61,8 @@ alias tp='tailpod'
 alias ep='execpod'
 alias rbac='rbac-lookup'
 alias kbox='kubectl run --generator=run-pod/v1 busybox --image=radial/busyboxplus:curl -i --tty --rm'
+alias kpython='kubectl run -i --tty --image pstauffer/curl:latest python-test --restart=Never --rm /bin/sh'
 alias ksl='k8sec list'
 function kev
     kubectl get events  --sort-by='.metadata.creationTimestamp'  -o 'go-template={{range .items}}{{.involvedObject.name}}{{"\t"}}{{.involvedObject.kind}}{{"\t"}}{{.message}}{{"\t"}}{{.reason}}{{"\t"}}{{.type}}{{"\t"}}{{.firstTimestamp}}{{"\n"}}{{end}}'
 end
-
