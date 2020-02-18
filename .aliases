@@ -64,4 +64,5 @@ alias kbox='kubectl run --generator=run-pod/v1 busybox --image=radial/busyboxplu
 alias kpython='kubectl run -i --tty --image pstauffer/curl:latest python-test --restart=Never --rm /bin/sh'
 alias ksl='k8sec list'
 alias hall='helm3 ls --all-namespaces'
+alias kc='kube-capacity'
 alias kcp='kube-capacity -p'
