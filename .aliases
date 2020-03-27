@@ -22,13 +22,14 @@ alias v='vault'
 # GIT
 alias gs='git status'
 alias dif='git diff'
+alias gac='git add . && git commit -m'
+alias gplom='git pull origin master'
 alias gb='git symbolic-ref --short HEAD'
 alias gbr='git branch -av'
 alias g1='git log -1'
 alias gl="git log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'"
 alias gll='git log --stat --abbrev-commit'
 alias gld='git log --pretty=format:%cd --date=short | uniq -c'
-alias gac='git add . && git commit -m'
 
 # DOCKER
 alias dps='docker ps --all --format "table {{.Names}}\t{{.Status}}\t{{.Image}}\t{{.Ports}}"'
