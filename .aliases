@@ -21,7 +21,6 @@ alias v='vault'
 
 # GIT
 alias f='fluxctl'
-alias go='git open'
 alias gs='git status'
 alias dif='git diff'
 alias gac='git add . && git commit -m'
