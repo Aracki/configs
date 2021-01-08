@@ -74,6 +74,10 @@ alias kpython='kubectl run -i --tty --image pstauffer/curl:latest python-test --
 alias ktp='kubectl top pod | sort --key 3 --numeric'
 alias ktpall='kubectl top pod -A | sort --key 4 --numeric'
 alias ksl='k8sec list'
-alias hall='helm3 ls --all-namespaces'
+alias hall='helm ls --all-namespaces'
+alias kghr='k get helmrelease'
 alias kc='kube-capacity'
 alias kcp='kube-capacity -p'
+function khttp
+    kubectl get ing -o json | jq -r '.items[] | .spec.rules[].host + .spec.rules[].http.paths[].path + " served by " + .spec.rules[].http.paths[].backend.serviceName' | sort -u
+end
