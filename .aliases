@@ -73,6 +73,7 @@ alias kbox='kubectl run --generator=run-pod/v1 busybox --image=radial/busyboxplu
 alias kpython='kubectl run -i --tty --image pstauffer/curl:latest python-test --restart=Never --rm /bin/sh'
 alias ktp='kubectl top pod | sort --key 3 --numeric'
 alias ktpall='kubectl top pod -A | sort --key 4 --numeric'
+alias ktpc='kubectl top pod --containers'
 alias ksl='k8sec list'
 alias hall='helm ls --all-namespaces'
 alias kghr='k get helmrelease'
