@@ -1,5 +1,5 @@
 # configs
-Aliases and configs that accelerates productivity.
+Carefully selected aliases and configs that accelerates my productivity.
 
 ## Included files
 * `~/.aliases`
