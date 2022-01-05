@@ -20,10 +20,10 @@ alias tfer='terraformer'
 alias bs='base64 --decode'
 alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
 alias v='vault'
-
-# GIT
 alias f='flux'
 alias f2='flux2'
+
+# GIT
 alias gs='git status'
 alias dif='git diff'
 alias gac='git add . && git commit -m'
