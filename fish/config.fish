@@ -7,7 +7,7 @@ set -gx PATH $GOBIN $PATH
 . ~/.servers
 . ~/.aliases
 
-[ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
+[ -f /opt/homebrew/share/autojump/autojump.fish ]; and source /opt/homebrew/share/autojump/autojump.fish
 
 function manopt
     set -l cmd $argv[1]
