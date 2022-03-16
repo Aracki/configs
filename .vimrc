@@ -15,4 +15,6 @@ set hlsearch
 
 set timeoutlen=10
 
+set mmp=5000
+
 syntax on
