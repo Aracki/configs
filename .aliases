@@ -84,8 +84,8 @@ alias hsp='helm search repo|grep production'
 alias hall='helm ls --all-namespaces'
 alias kghr='k get helmrelease'
 alias kghrr="kghr -o custom-columns='NAME:.metadata.name,READY:.status.conditions[0].status,VERSION_REQUESTED:.spec.chart.spec.version,APPLIED:.status.lastAppliedRevision,DEPLOYED:.status.conditions[0].lastTransitionTime'"
-alias kc='kube-capacity'
-alias kcp='kube-capacity -p'
+alias kc='k resource-capacity'
+alias kcp='k resource-capacity -p'
 function khttp
     kubectl get ing -o json | jq -r '.items[] | .spec.rules[].host + .spec.rules[].http.paths[].path + " served by " + .spec.rules[].http.paths[].backend.serviceName' | sort -u
 end
