@@ -1,11 +1,11 @@
-export GOROOT=/usr/local/go
-export GOPATH=/Users/Raca/go
-export GOBIN=$GOPATH/bin
-
-set -gx PATH $GOBIN $PATH
-
-. ~/.servers
 . ~/.aliases
+. ~/.servers
+
+export GOROOT=/usr/local/go
+export GOPATH=/Users/raca/go
+
+set PATH /opt/homebrew/bin $PATH
+set PATH $PATH $HOME/.krew/bin
 
 [ -f /opt/homebrew/share/autojump/autojump.fish ]; and source /opt/homebrew/share/autojump/autojump.fish
 
