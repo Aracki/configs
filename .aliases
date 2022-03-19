@@ -79,8 +79,6 @@ alias ktp='kubectl top pod | sort --key 3 --numeric'
 alias ktpall='kubectl top pod -A | sort --key 4 --numeric'
 alias ktpc='kubectl top pod --containers'
 alias ksl='k8sec list'
-alias hss='helm search repo|grep staging'
-alias hsp='helm search repo|grep production'
 alias hall='helm ls --all-namespaces'
 alias kghr='k get helmrelease'
 alias kghrr="kghr -o custom-columns='NAME:.metadata.name,READY:.status.conditions[0].status,VERSION_REQUESTED:.spec.chart.spec.version,APPLIED:.status.lastAppliedRevision,DEPLOYED:.status.conditions[0].lastTransitionTime'"
