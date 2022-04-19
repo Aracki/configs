@@ -6,7 +6,7 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
 # MISC
-alias h='history'
+alias h="history --show-time='%d.%h - %H:%M:%S '"
 alias a='bat'
 alias r='ranger'
 alias l='ls -lrthp'
