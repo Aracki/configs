@@ -22,6 +22,7 @@ alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date
 alias v='vault'
 alias f='flux'
 alias f2='flux2'
+alias g='gcloud'
 
 # GIT
 alias gs='git status'
