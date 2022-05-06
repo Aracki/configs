@@ -12,8 +12,6 @@ alias r='ranger'
 alias l='ls -lrthp'
 alias tre='exa --long --tree --color-scale'
 alias grid='exa --recurse -L 2 -l --grid'
-alias publicip='curl ipinfo.io/ip'
-alias localip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
 alias ap='ansible-playbook'
 alias tf='terraform'
 alias tfer='terraformer'
@@ -23,6 +21,9 @@ alias v='vault'
 alias f='flux'
 alias f2='flux2'
 alias g='gcloud'
+alias publicip='curl ipinfo.io/ip'
+alias privateip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
+alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
 
 # GIT
 alias gs='git status'
