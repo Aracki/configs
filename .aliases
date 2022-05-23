@@ -82,16 +82,12 @@ alias dp='describepod'
 alias tp='tailpod'
 alias ep='execpod'
 alias rbac='rbac-lookup'
-alias kbox='kubectl run busybox --image=radial/busyboxplus:curl -i --tty --rm'
-alias kpython='kubectl run -i --tty --image pstauffer/curl:latest python-test --restart=Never --rm /bin/sh'
 alias ktp='kubectl top pod | sort --key 3 --numeric'
 alias ktpall='kubectl top pod -A | sort --key 4 --numeric'
 alias ktpc='kubectl top pod --containers'
 alias kconvert='kubectl-convert'
 alias ksl='k8sec list'
 alias hall='helm ls --all-namespaces'
-alias kghr='k get helmrelease'
-alias kghrr="kghr -o custom-columns='NAME:.metadata.name,READY:.status.conditions[0].status,VERSION_REQUESTED:.spec.chart.spec.version,APPLIED:.status.lastAppliedRevision,DEPLOYED:.status.conditions[0].lastTransitionTime'"
 alias kc='k resource-capacity -u'
 alias kcp='k resource-capacity -p -u'
 alias kcc='k resource-capacity -c'
@@ -99,3 +95,5 @@ alias kvu='k view-utilization -h'
 function khttp
     kubectl get ing -o json | jq -r '.items[] | .spec.rules[].host + .spec.rules[].http.paths[].path + " served by " + .spec.rules[].http.paths[].backend.serviceName' | sort -u
 end
+alias kbox='kubectl run busybox --image=radial/busyboxplus:curl -i --tty --rm'
+alias kpython='kubectl run -i --tty --image pstauffer/curl:latest python-test --restart=Never --rm /bin/sh'
