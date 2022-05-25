@@ -25,6 +25,7 @@ alias publicip='curl ipinfo.io/ip'
 alias privateip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
 alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
 alias dig='dig +short'
+alias duf='duf -hide special'
 
 # GIT
 alias gs='git status'
@@ -78,6 +79,7 @@ alias kgsl='k get servicelevel'
 alias kgpv='k get pv'
 alias kgpvc='k get pvc'
 alias kgcm='k get cm'
+alias kgsa='k get sa'
 alias dp='describepod'
 alias tp='tailpod'
 alias ep='execpod'
