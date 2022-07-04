@@ -96,11 +96,7 @@ alias kc='k resource-capacity -u'
 alias kcp='k resource-capacity -p -u'
 alias kcc='k resource-capacity -c'
 alias kvu='k view-utilization -h'
-function khttp
-    kubectl get ing -o json | jq -r '.items[] | .spec.rules[].host + .spec.rules[].http.paths[].path + " served by " + .spec.rules[].http.paths[].backend.serviceName' | sort -u
-end
 alias kbox='kubectl run busybox --image=radial/busyboxplus:curl -i --tty --rm'
-alias kpython='kubectl run -i --tty --image pstauffer/curl:latest python-test --restart=Never --rm /bin/sh'
 alias am='amtool'
 alias aml='amtool alert'
 alias ams='amtool silence'
