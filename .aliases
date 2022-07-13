@@ -26,6 +26,7 @@ alias privateip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -
 alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
 alias dig='dig +short'
 alias duf='duf -hide special'
+alias wttr='curl "https://wttr.in/?location=Belgrade"'
 
 # GIT
 alias gs='git status'
