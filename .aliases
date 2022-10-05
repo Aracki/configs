@@ -66,6 +66,10 @@ alias kgn2='k get no -o custom-columns=Name:".metadata.name",Kubelet:.status.nod
 alias kgc='k get po -o="custom-columns=NAME:.metadata.name,INIT-CONTAINERS:.spec.initContainers[*].name,CONTAINERS:.spec.containers[*].name"'
 alias kgpw='k get po -w'
 
+alias dp='describepod'
+alias tp='tailpod'
+alias ep='execpod'
+
 alias kgp='k get po'
 alias kgs='k get svc'
 alias kgi='k get ing'
@@ -128,12 +132,9 @@ alias kgig='k get ing | grep $1'
 alias kgdg='k get deploy | grep $1'
 alias ktpg='k top po | grep $1'
 
+# Mutli-cluster
 alias kgmci='k get mci'
 alias kgmcs='k get mcs'
-
-alias dp='describepod'
-alias tp='tailpod'
-alias ep='execpod'
 
 alias kpf='k port-forward'
 alias kvs='k view-secret'
@@ -144,15 +145,17 @@ alias kconvert='kubectl-convert'
 alias kbox='k run busybox --image=radial/busyboxplus:curl -i --attach --tty --rm'
 alias hall='helm ls --all-namespaces'
 
+# Resources
 alias ktp='k top pod | sort --key 3 --numeric'
 alias ktpall='kubectl top pod -A | sort --key 4 --numeric'
 alias ktpcpu='k top pod | sort --key 2 --numeric'
 alias ktpc='kubectl top pod --containers'
 alias ktn='k top no | sort --key 5 --numeric'
-alias kc='k resource-capacity -u'
+alias kc='k resource-capacity -u --pod-count'
 alias kcp='k resource-capacity -p -u'
 alias kcc='k resource-capacity -c'
 alias kvu='k view-utilization -h'
+alias kvun='k view-utilization -h node'
 
 alias am='amtool'
 alias aml='amtool alert'
