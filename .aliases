@@ -30,6 +30,8 @@ alias wttr='curl "https://wttr.in/?location=Belgrade"'
 
 # GIT
 alias gs='git status'
+alias gp='git push'
+alias grb='git fetch origin && git rebase origin master'
 alias dif='git diff'
 alias gac='git add . && git commit -m'
 alias gm='git checkout master; git reset --hard origin/master; gplom'
@@ -99,6 +101,7 @@ alias kgcrs='k get crs'
 alias kgpv='k get pv'
 alias kgpvc='k get pvc'
 alias kgn='k get no'
+alias kgpdb='k get pdb'
 
 # KUBERNETES - basic 1
 alias kgp1='k get po --sort-by=.metadata.creationTimestamp'
@@ -121,6 +124,7 @@ alias kgcrs='k get crs --sort-by=.metadata.creationTimestamp'
 alias kgpv1='k get pv --sort-by=.metadata.creationTimestamp'
 alias kgpvc1='k get pvc --sort-by=.metadata.creationTimestamp'
 alias kgn1='k get no --sort-by=.metadata.creationTimestamp'
+alias kgpdb1='k get pdb --sort-by=.metadata.creationTimestamp'
 
 # KUBERNETES - basic 2
 alias kgp2='k neat get po'
@@ -142,10 +146,12 @@ alias kgcert2='k neat get cert'
 alias kgcrs2='k neat get crs'
 alias kgpv2='k neat get pv'
 alias kgpvc2='k neat get pvc'
+alias kgpdb2='k neat get pdb'
 
 # KUBERNETES - grep
 alias kgng='k get no | grep $1'
 alias kgpg='k get po | grep $1'
+alias kgcmg='k get cm | grep $1'
 alias kgpk='k get po | grep kafka'
 alias kgsg='k get svc | grep $1'
 alias kgig='k get ing | grep $1'
@@ -153,6 +159,7 @@ alias kgdg='k get deploy | grep $1'
 alias ktpg='k top po | grep $1'
 alias kgpvg='k get pv | grep $1'
 alias kgpvcg='k get pvc | grep $1'
+alias kgpdbg='k get pdb | grep $1'
 
 # KUBERNETES - resources
 alias ktp='k top pod | sort --key 3 --numeric'
