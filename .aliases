@@ -30,18 +30,19 @@ alias wttr='curl "https://wttr.in/?location=Belgrade"'
 
 # GIT
 alias gs='git status'
-alias gp='git push'
-alias grb='git fetch origin && git rebase origin master'
 alias dif='git diff'
-alias gac='git add . && git commit -m'
-alias gm='git checkout master; git reset --hard origin/master; gplom'
-alias gplom='git pull origin master'
 alias gb='git symbolic-ref --short HEAD'
 alias gbr='git branch -av'
 alias g1='git log -1'
 alias gl="git log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'"
 alias gll='git log --stat --abbrev-commit'
 alias gld='git log --pretty=format:%cd --date=short | uniq -c'
+alias gplom='git pull origin master'
+alias grb='git fetch origin && git rebase origin master'
+alias gm='git checkout master; git reset --hard origin/master; gplom'
+alias gc='git checkout -b $(pbpaste)'
+alias gac='git add . && git commit -m'
+alias gp='git push'
 
 # DOCKER
 alias dps='docker ps --all --format "table {{.Names}}\t{{.Status}}\t{{.Image}}\t{{.Ports}}"'
