@@ -32,6 +32,8 @@ alias wttr='curl "https://wttr.in/?location=Belgrade"'
 alias gs='git status'
 alias dif='git diff'
 alias gb='git symbolic-ref --short HEAD'
+alias gf='git fetch origin'
+alias gmr='git merge origin master'
 alias gbr='git branch -av'
 alias g1='git log -1'
 alias gl="git log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'"
@@ -106,6 +108,7 @@ alias kgpv='k get pv'
 alias kgpvc='k get pvc'
 alias kgn='k get no'
 alias kgpdb='k get pdb'
+alias kgep='k get ep'
 
 # KUBERNETES - sort by creation time
 alias kgp1='k get po --sort-by=.metadata.creationTimestamp'
@@ -129,6 +132,7 @@ alias kgpv1='k get pv --sort-by=.metadata.creationTimestamp'
 alias kgpvc1='k get pvc --sort-by=.metadata.creationTimestamp'
 alias kgn1='k get no --sort-by=.metadata.creationTimestamp'
 alias kgpdb1='k get pdb --sort-by=.metadata.creationTimestamp'
+alias kgep1='k get ep --sort-by=.metadata.creationTimestamp'
 
 # KUBERNETES - use neat plugin
 alias kgp2='k neat get po'
@@ -151,6 +155,7 @@ alias kgcrs2='k neat get crs'
 alias kgpv2='k neat get pv'
 alias kgpvc2='k neat get pvc'
 alias kgpdb2='k neat get pdb'
+alias kgep2='k neat get ep'
 
 # KUBERNETES - grep specific resource
 alias kgpg='kgp|grep $1'
@@ -174,6 +179,7 @@ alias kgpvg='kgpv|grep $1'
 alias kgpvcg='kgpvc|grep $1'
 alias kgng='kgn|grep $1'
 alias kgpdbg='kgpdb|grep $1'
+alias kgepg='k get ep|grep $1'
 
 
 # KUBERNETES - resources
