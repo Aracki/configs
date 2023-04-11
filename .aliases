@@ -71,8 +71,6 @@ alias kgc='k get pod -o="custom-columns=NAME:.metadata.name,INIT-CONTAINERS:.spe
 alias kgci='k get pod --all-namespaces -o jsonpath="{.items[*].spec.containers[*].image}" | tr -s \'[[:space:]]\' \'\n\' | sort | uniq -c'
 alias kgcall='kgc -A'
 alias kgpw='k get po -w'
-alias kgpo='k get po -owide'
-alias kgpo1='k get po -owide --sort-by=.metadata.creationTimestamp'
 alias dp='describepod'
 alias tp='tailpod'
 alias ep='execpod'
@@ -91,6 +89,7 @@ alias kgn2='k get no -o custom-columns=Name:".metadata.name",Kubelet:.status.nod
 
 # KUBERNETES - basic
 alias kgp='k get po'
+alias kgpo='k get po -owide'
 alias kgs='k get svc'
 alias kgi='k get ing'
 alias kgd='k get deploy'
@@ -115,6 +114,7 @@ alias kgep='k get ep'
 
 # KUBERNETES - sort by creation time
 alias kgp1='k get po --sort-by=.metadata.creationTimestamp'
+alias kgpo1='k get po -owide --sort-by=.metadata.creationTimestamp'
 alias kgs1='k get svc --sort-by=.metadata.creationTimestamp'
 alias kgi1='k get ing --sort-by=.metadata.creationTimestamp'
 alias kgd1='k get deploy --sort-by=.metadata.creationTimestamp'
@@ -139,6 +139,7 @@ alias kgep1='k get ep --sort-by=.metadata.creationTimestamp'
 
 # KUBERNETES - use neat plugin
 alias kgp2='k neat get po'
+alias kgpo2='k neat get po -owide'
 alias kgs2='k neat get svc'
 alias kgi2='k neat get ing'
 alias kgd2='k neat get deploy'
@@ -162,6 +163,7 @@ alias kgep2='k neat get ep'
 
 # KUBERNETES - grep specific resource
 alias kgpg='kgp|grep $1'
+alias kgpog='kgp -owide|grep $1'
 alias kgsg='kgs|grep $1'
 alias kgig='kgi|grep $1'
 alias kgdg='kgd|grep $1'
