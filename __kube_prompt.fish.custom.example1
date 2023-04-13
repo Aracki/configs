@@ -4,23 +4,21 @@
 
 set -g color_blue (set_color blue)
 set -g color_red (set_color DF4F2B)
+set -g color_green (set_color green)
 
 function __kube_ps_update_cache
   function __kube_ps_cache_namespace
 
     set -l ns (kubectl config view --minify -o 'jsonpath={..namespace}' 2>/dev/null)
     set -l ctx (kubectl config current-context)
-    set -l production "custom-cluster-name"
 
-    if string match -q "$ctx" "$production"
-        set -g __kube_ps_namespace "$color_red$ns"
+    if string match -q "$ctx" "kind-k122"
+        set -g __kube_ps_namespace "$color_green$ns"
         return
     end
-
-    if [ "$ctx"!="$production" ]
-        set -g __kube_ps_namespace "$color_blue$ns"
-        return
-    end
+        
+    set -g __kube_ps_context "$color_red$ctx"
+    set -g __kube_ps_namespace "$color_blue$ns"
   end
 
   function __stat_mtime
@@ -60,5 +58,5 @@ function __kube_prompt
   end
 
   __kube_ps_update_cache
-  echo -n -s " (⎈ $__kube_ps_namespace)"
+  echo -n -s " (⎈ $__kube_ps_context|$__kube_ps_namespace)"
 end
