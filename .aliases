@@ -44,6 +44,7 @@ alias gc='git checkout -b'
 alias gcm='git checkout master'
 alias gac='git add . && git commit -m'
 alias gp='git push'
+alias gchp='git cherry-pick'
 
 # DOCKER
 alias dps='docker ps --all --format "table {{.Names}}\t{{.Status}}\t{{.Image}}\t{{.Ports}}"'
