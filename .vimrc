@@ -1,7 +1,6 @@
-set nocompatible
-
 set number
 set rnu
+set cursorline
 
 set autoindent
 set cindent
@@ -18,3 +17,7 @@ set timeoutlen=10
 set mmp=5000
 
 syntax on
+
+noremap! <C-?> <C-h>
+
+colors habamax
