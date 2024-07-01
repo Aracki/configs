@@ -279,3 +279,15 @@ alias kccg='k resource-capacity -c -u | grep $1'
 alias kcc1='k resource-capacity -c -u --sort cpu.util.percentage'
 alias kcc2='k resource-capacity -c -u --sort mem.util.percentage'
 
+function kdbg
+    kubectl debug -it $argv[1] --image nicolaka/netshoot -- /bin/bash
+end
+
+function ktpn --argument node_name
+    for line in (kubectl get pods --all-namespaces --field-selector spec.nodeName=$node_name -o=jsonpath='{range .items[*]}{.metadata.namespace}{" "}{.metadata.name}{"\n"}{end}')
+        set namespace (echo $line | cut -d ' ' -f 1)
+        set pod (echo $line | cut -d ' ' -f 2)
+        kubectl top pod $pod -n $namespace --no-headers
+    end
+end
+
