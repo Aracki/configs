@@ -284,10 +284,14 @@ function kdbg
 end
 
 function ktpn --argument node_name
+    printf "%-60s %-30s %-30s\n" "Node" "CPU" "Memory"
     for line in (kgp -A --field-selector=metadata.namespace!=kube-system,metadata.namespace!=gmp-system,metadata.namespace!=monitoring,spec.nodeName=$node_name -o=jsonpath='{range .items[*]}{.metadata.namespace}{" "}{.metadata.name}{"\n"}{end}')
         set namespace (echo $line | cut -d ' ' -f 1)
         set pod (echo $line | cut -d ' ' -f 2)
-        kubectl top pod $pod -n $namespace --no-headers
+        set usage (kubectl top pod $pod -n $namespace --no-headers)
+        set cpu (echo $usage | awk '{print $2}')
+        set mem (echo $usage | awk '{print $3}')
+        printf "%-60s %-30s %-30s\n" $pod $cpu $mem
     end
 end
 
