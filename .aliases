@@ -24,7 +24,9 @@ alias privateip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -
 alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
 alias dig='dig +short'
 alias duf='duf -hide special'
+alias dust='dust -r -z1000000'
 alias rgg='vim $(rg . | fzf | cut -d ":" -f 1)'
+alias tt='thanos tools'
 
 # GIT
 alias gs='git status'
@@ -64,6 +66,7 @@ alias kap='k apply -f'
 alias kdif="KUBECTL_EXTERNAL_DIFF='colordiff -N -u' kubectl diff -f"
 alias kall='k get -A'
 alias kgc='k get pod -o="custom-columns=NAME:.metadata.name,INIT-CONTAINERS:.spec.initContainers[*].name,CONTAINERS:.spec.containers[*].name"'
+alias kgcg='k get pod -o="custom-columns=NAME:.metadata.name,INIT-CONTAINERS:.spec.initContainers[*].name,CONTAINERS:.spec.containers[*].name"|grep $1'
 alias kgci='k get pod --all-namespaces -o jsonpath="{.items[*].spec.containers[*].image}" | tr -s \'[[:space:]]\' \'\n\' | sort | uniq -c'
 alias dp='describepod'
 alias tp='tailpod'
@@ -78,6 +81,7 @@ alias ams='amtool silence'
 alias kgno='k get no -o custom-columns=Name:".metadata.name",Kubelet:.status.nodeInfo.kubeletVersion,Status:.status.conditions[-1].reason,Date:".metadata.creationTimestamp",InstType:".metadata.labels.beta\.kubernetes\.io/instance-type,Cpu Cores:.status.capacity.cpu,Ram:.status.capacity.memory,Internal-IP:".status.addresses[0].address", External-IP:".status.addresses[1].address",Taints:.spec.taints" --sort-by=.metadata.creationTimestamp'
 alias kgnog='k get no -o custom-columns=Name:".metadata.name",Kubelet:.status.nodeInfo.kubeletVersion,Status:.status.conditions[-1].reason,Date:".metadata.creationTimestamp",InstType:".metadata.labels.beta\.kubernetes\.io/instance-type,Cpu Cores:.status.capacity.cpu,Ram:.status.capacity.memory,Internal-IP:".status.addresses[0].address", External-IP:".status.addresses[1].address",Taints:.spec.taints" --sort-by=.metadata.creationTimestamp | grep $1'
 alias kgoom="kgp --output=jsonpath='{ range .items[*]}{.status.containerStatuses[*].name}    {.status.containerStatuses[*].lastState.terminated.reason }    {.status.containerStatuses[*].lastState.terminated.finishedAt}{\"\n\"}{end}' | grep OOMKilled"
+alias kgpv3='kgpv --sort-by=.spec.capacity.storage'
 
 # KUBERNETES - basic
 alias kgp='k get po'
@@ -113,6 +117,9 @@ alias kgmcs='k get mcs'
 alias kgprobe='k get probe'
 alias kgcr='k get clusterrole'
 alias kgcrb='k get clusterrolebinding'
+alias kgkafka='k get kafka'
+alias kgapp='k get app'
+alias kgappset='k get appset'
 
 # KUBERNETES - sort by creation time
 alias kgp1='k get po --sort-by=.metadata.creationTimestamp'
@@ -148,6 +155,9 @@ alias kgmcs1='k get mcs --sort-by=.metadata.creationTimestamp'
 alias kgprobe1='k get probe --sort-by=.metadata.creationTimestamp'
 alias kgcr1='k get clusterrole --sort-by=.metadata.creationTimestamp'
 alias kgcrb1='k get clusterrolebinding --sort-by=.metadata.creationTimestamp'
+alias kgkafka1='k get kafka --sort-by=.metadata.creationTimestamp'
+alias kgapp1='k get app --sort-by=.metadata.creationTimestamp'
+alias kgappset1='k get appset --sort-by=.metadata.creationTimestamp'
 
 # KUBERNETES - use neat plugin
 alias kgp2='k neat get po'
@@ -182,8 +192,12 @@ alias kgmcs2='k neat get mcs'
 alias kgprobe2='k neat get probe'
 alias kgcr2='k neat get clusterrole'
 alias kgcrb2='k neat get clusterrolebinding'
+alias kgkafka2='k neat get kafka'
+alias kgapp2='k neat get app'
+alias kgappset2='k neat get appset'
 
 # KUBERNETES - grep specific resource
+#alias kgpg='kgp| sed -n "1p; /$1/p"'
 alias kgpg='kgp|grep $1'
 alias kgpog='kgp -owide|grep $1'
 alias kgsg='kgs|grep $1'
@@ -217,6 +231,9 @@ alias kgmcsg='k get mcs|grep $1'
 alias kgprobeg='k get probe|grep $1'
 alias kgcrg='kgrc|grep $1'
 alias kgcrbg='kgcrb|grep $1'
+alias kgkafkag='kgkafka|grep $1'
+alias kgappg='k get app|grep $1'
+alias kgappsetg='k get appset|grep $1'
 
 # KUBERNETES - describe
 alias kdp='k describe po'
@@ -251,6 +268,9 @@ alias kdmcs='k describe mcs'
 alias kdprobe='k describe probe'
 alias kdcr='k describe clusterrole'
 alias kdcrb='k describe clusterrolebinding'
+alias kdkafka='k describe kafka'
+alias kdapp='k describe app'
+alias kdappset='k describe appset'
 
 # KUBERNETES - resources
 alias ktp='k top pod'
@@ -295,3 +315,37 @@ function ktpn --argument node_name
     end
 end
 
+# KUBERNETES - get resource and vim it
+function kgp3; k neat get po $argv | vim -; end
+function kgs3; k neat get svc $argv | vim -; end
+function kgi3; k neat get ing $argv | vim -; end
+function kgd3; k neat get deploy $argv | vim -; end
+function kgsts3; k neat get sts $argv | vim -; end
+function kgds3; k neat get ds $argv | vim -; end
+function kgsec3; k neat get secret $argv | vim -; end
+function kgsm3; k neat get servicemonitor $argv | vim -; end
+function kgpr3; k neat get prometheusrule $argv | vim -; end
+function kgns3; k neat get ns $argv | vim -; end
+function kgcm3; k neat get cm $argv | vim -; end
+function kgsa3; k neat get sa $argv | vim -; end
+function kghpa3; k neat get hpa $argv | vim -; end
+function kgsc3; k neat get sc $argv | vim -; end
+function kgev3; k neat get ev $argv | vim -; end
+function kgcert3; k neat get cert $argv | vim -; end
+function kgcrs3; k neat get crs $argv | vim -; end
+function kgissuer3; k neat get issuer $argv | vim -; end
+function kgorder3; k neat get order $argv | vim -; end
+function kgchallenge3; k neat get challenge $argv | vim -; end
+function kgpv3; k neat get pv $argv | vim -; end
+function kgpvc3; k neat get pvc $argv | vim -; end
+function kgn3; k neat get no $argv | vim -; end
+function kgpdb3; k neat get pdb $argv | vim -; end
+function kgep3; k neat get ep $argv | vim -; end
+function kgj3; k neat get job $argv | vim -; end
+function kgcj3; k neat get cj $argv | vim -; end
+function kgmci3; k neat get mci $argv | vim -; end
+function kgmcs3; k neat get mcs $argv | vim -; end
+function kgprobe3; k neat get probe $argv | vim -; end
+function kgcr3; k neat get clusterrole $argv | vim -; end
+function kgcrb3; k neat get clusterrolebinding $argv | vim -; end
+function kgkafka3; k neat get kafka $argv | vim -; end
