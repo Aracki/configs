@@ -236,6 +236,41 @@ alias kgkafkag='kgkafka|grep $1'
 alias kgappg='k get app|grep $1'
 alias kgappsetg='k get appset|grep $1'
 
+# KUBERNETES - get resource and vim it
+function kgp3; k neat get po $argv | vim -; end
+function kgs3; k neat get svc $argv | vim -; end
+function kgi3; k neat get ing $argv | vim -; end
+function kgd3; k neat get deploy $argv | vim -; end
+function kgsts3; k neat get sts $argv | vim -; end
+function kgds3; k neat get ds $argv | vim -; end
+function kgsec3; k neat get secret $argv | vim -; end
+function kgsm3; k neat get servicemonitor $argv | vim -; end
+function kgpr3; k neat get prometheusrule $argv | vim -; end
+function kgns3; k neat get ns $argv | vim -; end
+function kgcm3; k neat get cm $argv | vim -; end
+function kgsa3; k neat get sa $argv | vim -; end
+function kghpa3; k neat get hpa $argv | vim -; end
+function kgsc3; k neat get sc $argv | vim -; end
+function kgev3; k neat get ev $argv | vim -; end
+function kgcert3; k neat get cert $argv | vim -; end
+function kgcrs3; k neat get crs $argv | vim -; end
+function kgissuer3; k neat get issuer $argv | vim -; end
+function kgorder3; k neat get order $argv | vim -; end
+function kgchallenge3; k neat get challenge $argv | vim -; end
+function kgpv3; k neat get pv $argv | vim -; end
+function kgpvc3; k neat get pvc $argv | vim -; end
+function kgn3; k neat get no $argv | vim -; end
+function kgpdb3; k neat get pdb $argv | vim -; end
+function kgep3; k neat get ep $argv | vim -; end
+function kgj3; k neat get job $argv | vim -; end
+function kgcj3; k neat get cj $argv | vim -; end
+function kgmci3; k neat get mci $argv | vim -; end
+function kgmcs3; k neat get mcs $argv | vim -; end
+function kgprobe3; k neat get probe $argv | vim -; end
+function kgcr3; k neat get clusterrole $argv | vim -; end
+function kgcrb3; k neat get clusterrolebinding $argv | vim -; end
+function kgkafka3; k neat get kafka $argv | vim -; end
+
 # KUBERNETES - describe resource
 alias kdp='k describe po'
 alias kds='k describe svc'
@@ -300,42 +335,6 @@ alias krc='k resource-capacity -c -u'
 alias krcg='k resource-capacity -c -u | grep $1'
 alias krc1='k resource-capacity -c -u --sort cpu.util.percentage'
 alias krc2='k resource-capacity -c -u --sort mem.util.percentage'
-
-# KUBERNETES - get resource and vim it
-function kgp3; k neat get po $argv | vim -; end
-function kgs3; k neat get svc $argv | vim -; end
-function kgi3; k neat get ing $argv | vim -; end
-function kgd3; k neat get deploy $argv | vim -; end
-function kgsts3; k neat get sts $argv | vim -; end
-function kgds3; k neat get ds $argv | vim -; end
-function kgsec3; k neat get secret $argv | vim -; end
-function kgsm3; k neat get servicemonitor $argv | vim -; end
-function kgpr3; k neat get prometheusrule $argv | vim -; end
-function kgns3; k neat get ns $argv | vim -; end
-function kgcm3; k neat get cm $argv | vim -; end
-function kgsa3; k neat get sa $argv | vim -; end
-function kghpa3; k neat get hpa $argv | vim -; end
-function kgsc3; k neat get sc $argv | vim -; end
-function kgev3; k neat get ev $argv | vim -; end
-function kgcert3; k neat get cert $argv | vim -; end
-function kgcrs3; k neat get crs $argv | vim -; end
-function kgissuer3; k neat get issuer $argv | vim -; end
-function kgorder3; k neat get order $argv | vim -; end
-function kgchallenge3; k neat get challenge $argv | vim -; end
-function kgpv3; k neat get pv $argv | vim -; end
-function kgpvc3; k neat get pvc $argv | vim -; end
-function kgn3; k neat get no $argv | vim -; end
-function kgpdb3; k neat get pdb $argv | vim -; end
-function kgep3; k neat get ep $argv | vim -; end
-function kgj3; k neat get job $argv | vim -; end
-function kgcj3; k neat get cj $argv | vim -; end
-function kgmci3; k neat get mci $argv | vim -; end
-function kgmcs3; k neat get mcs $argv | vim -; end
-function kgprobe3; k neat get probe $argv | vim -; end
-function kgcr3; k neat get clusterrole $argv | vim -; end
-function kgcrb3; k neat get clusterrolebinding $argv | vim -; end
-function kgkafka3; k neat get kafka $argv | vim -; end
-
 # ------------------------------------------------------------------------------
 
 function kdbg
