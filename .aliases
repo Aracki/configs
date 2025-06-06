@@ -57,7 +57,7 @@ alias dn='docker network ls'
 alias dv='docker volume ls'
 alias dc="docker-compose"
 
-# KUBERNETES
+# KUBERNETES - basic
 alias k='kubectl'
 alias ktx='kubectx'
 alias kx='ktx -'
@@ -67,7 +67,8 @@ alias kdif="KUBECTL_EXTERNAL_DIFF='colordiff -N -u' kubectl diff -f"
 alias kall='k get -A'
 alias kgc='k get pod -o="custom-columns=NAME:.metadata.name,INIT-CONTAINERS:.spec.initContainers[*].name,CONTAINERS:.spec.containers[*].name"'
 alias kgcg='k get pod -o="custom-columns=NAME:.metadata.name,INIT-CONTAINERS:.spec.initContainers[*].name,CONTAINERS:.spec.containers[*].name"|grep $1'
-alias kgci='k get pod --all-namespaces -o jsonpath="{.items[*].spec.containers[*].image}" | tr -s \'[[:space:]]\' \'\n\' | sort | uniq -c'
+alias kgci='k get pod --all-namespaces -o jsonpath="{.items[*].spec.containers[*].image}" | tr -s \'[[:space:]]\' \'\n\' | sort | uniq -c | sort -nr'
+alias kgcig='kgci|grep $1'
 alias dp='describepod'
 alias tp='tailpod'
 alias ep='execpod'
@@ -82,8 +83,9 @@ alias kgno='k get no -o custom-columns=Name:".metadata.name",Kubelet:.status.nod
 alias kgnog='k get no -o custom-columns=Name:".metadata.name",Kubelet:.status.nodeInfo.kubeletVersion,Status:.status.conditions[-1].reason,Date:".metadata.creationTimestamp",InstType:".metadata.labels.beta\.kubernetes\.io/instance-type,Cpu Cores:.status.capacity.cpu,Ram:.status.capacity.memory,Internal-IP:".status.addresses[0].address", External-IP:".status.addresses[1].address",Taints:.spec.taints" --sort-by=.metadata.creationTimestamp | grep $1'
 alias kgoom="kgp --output=jsonpath='{ range .items[*]}{.status.containerStatuses[*].name}    {.status.containerStatuses[*].lastState.terminated.reason }    {.status.containerStatuses[*].lastState.terminated.finishedAt}{\"\n\"}{end}' | grep OOMKilled"
 alias kgpv3='kgpv --sort-by=.spec.capacity.storage'
+alias kgpp='kgp -l app.kubernetes.io/instance=prometheus-prometheus -owide' 
 
-# KUBERNETES - basic
+# KUBERNETES - get resource
 alias kgp='k get po'
 alias kgpo='k get po -owide'
 alias kgs='k get svc'
@@ -121,7 +123,7 @@ alias kgkafka='k get kafka'
 alias kgapp='k get app'
 alias kgappset='k get appset'
 
-# KUBERNETES - sort by creation time
+# KUBERNETES - get resource & sort by creation time
 alias kgp1='k get po --sort-by=.metadata.creationTimestamp'
 alias kgpo1='k get po -owide --sort-by=.metadata.creationTimestamp'
 alias kgs1='k get svc --sort-by=.metadata.creationTimestamp'
@@ -159,7 +161,7 @@ alias kgkafka1='k get kafka --sort-by=.metadata.creationTimestamp'
 alias kgapp1='k get app --sort-by=.metadata.creationTimestamp'
 alias kgappset1='k get appset --sort-by=.metadata.creationTimestamp'
 
-# KUBERNETES - use neat plugin
+# KUBERNETES - get resource using neat plugin
 alias kgp2='k neat get po'
 alias kgpo2='k neat get po -owide'
 alias kgs2='k neat get svc'
@@ -196,8 +198,7 @@ alias kgkafka2='k neat get kafka'
 alias kgapp2='k neat get app'
 alias kgappset2='k neat get appset'
 
-# KUBERNETES - grep specific resource
-#alias kgpg='kgp| sed -n "1p; /$1/p"'
+# KUBERNETES - get resource & grep it
 alias kgpg='kgp|grep $1'
 alias kgpog='kgp -owide|grep $1'
 alias kgsg='kgs|grep $1'
@@ -235,7 +236,7 @@ alias kgkafkag='kgkafka|grep $1'
 alias kgappg='k get app|grep $1'
 alias kgappsetg='k get appset|grep $1'
 
-# KUBERNETES - describe
+# KUBERNETES - describe resource
 alias kdp='k describe po'
 alias kds='k describe svc'
 alias kdi='k describe ing'
@@ -272,7 +273,7 @@ alias kdkafka='k describe kafka'
 alias kdapp='k describe app'
 alias kdappset='k describe appset'
 
-# KUBERNETES - resources
+# KUBERNETES - top commands
 alias ktp='k top pod'
 alias ktpg='k top pod | grep $1'
 alias ktp1='k top pod | sort --key 2 --numeric'
@@ -285,35 +286,20 @@ alias ktn='k top no'
 alias ktng='k top no | grep $1'
 alias ktn1='k top no | sort --key 3 --numeric'
 alias ktn2='k top no | sort --key 5 --numeric'
-# ---------------------------------------------------------
-alias kcn='k resource-capacity -u'
-alias kcng='k resource-capacity -u | grep $1'
-alias kcn1='k resource-capacity -u --sort cpu.util.percentage'
-alias kcn2='k resource-capacity -u --sort mem.util.percentage'
-alias kcp='k resource-capacity -p -u'
-alias kcpg='k resource-capacity -p -u | grep $1'
-alias kcp1='k resource-capacity -p -u --sort cpu.util.percentage'
-alias kcp2='k resource-capacity -p -u --sort mem.util.percentage'
-alias kcc='k resource-capacity -c -u'
-alias kccg='k resource-capacity -c -u | grep $1'
-alias kcc1='k resource-capacity -c -u --sort cpu.util.percentage'
-alias kcc2='k resource-capacity -c -u --sort mem.util.percentage'
 
-function kdbg
-    kubectl debug -it $argv[1] --image nicolaka/netshoot -- /bin/bash
-end
-
-function ktpn --argument node_name
-    printf "%-60s %-30s %-30s\n" "Node" "CPU" "Memory"
-    for line in (kgp -A --field-selector=metadata.namespace!=kube-system,metadata.namespace!=gmp-system,metadata.namespace!=monitoring,spec.nodeName=$node_name -o=jsonpath='{range .items[*]}{.metadata.namespace}{" "}{.metadata.name}{"\n"}{end}')
-        set namespace (echo $line | cut -d ' ' -f 1)
-        set pod (echo $line | cut -d ' ' -f 2)
-        set usage (kubectl top pod $pod -n $namespace --no-headers)
-        set cpu (echo $usage | awk '{print $2}')
-        set mem (echo $usage | awk '{print $3}')
-        printf "%-60s %-30s %-30s\n" $pod $cpu $mem
-    end
-end
+# KUBERNETES - resource-capacity commands
+alias krn='k resource-capacity -u'
+alias krng='k resource-capacity -u | grec $1'
+alias krn1='k resource-capacity -u --sort cpu.util.percentage'
+alias krn2='k resource-capacity -u --sort mem.util.percentage'
+alias krp='k resource-capacity -p -u'
+alias krpg='k resource-capacity -p -u | grep $1'
+alias krp1='k resource-capacity -p -u --sort cpu.util.percentage'
+alias krp2='k resource-capacity -p -u --sort mem.util.percentage'
+alias krc='k resource-capacity -c -u'
+alias krcg='k resource-capacity -c -u | grep $1'
+alias krc1='k resource-capacity -c -u --sort cpu.util.percentage'
+alias krc2='k resource-capacity -c -u --sort mem.util.percentage'
 
 # KUBERNETES - get resource and vim it
 function kgp3; k neat get po $argv | vim -; end
@@ -349,3 +335,22 @@ function kgprobe3; k neat get probe $argv | vim -; end
 function kgcr3; k neat get clusterrole $argv | vim -; end
 function kgcrb3; k neat get clusterrolebinding $argv | vim -; end
 function kgkafka3; k neat get kafka $argv | vim -; end
+
+# ------------------------------------------------------------------------------
+
+function kdbg
+    kubectl debug -it $argv[1] --image nicolaka/netshoot -- /bin/bash
+end
+
+function ktpn --argument node_name
+    printf "%-60s %-30s %-30s\n" "Node" "CPU" "Memory"
+    for line in (kgp -A --field-selector=metadata.namespace!=kube-system,metadata.namespace!=gmp-system,metadata.namespace!=monitoring,spec.nodeName=$node_name -o=jsonpath='{range .items[*]}{.metadata.namespace}{" "}{.metadata.name}{"\n"}{end}')
+        set namespace (echo $line | cut -d ' ' -f 1)
+        set pod (echo $line | cut -d ' ' -f 2)
+        set usage (kubectl top pod $pod -n $namespace --no-headers)
+        set cpu (echo $usage | awk '{print $2}')
+        set mem (echo $usage | awk '{print $3}')
+        printf "%-60s %-30s %-30s\n" $pod $cpu $mem
+    end
+end
+
