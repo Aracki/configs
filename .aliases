@@ -84,6 +84,7 @@ alias kgnog='k get no -o custom-columns=Name:".metadata.name",Kubelet:.status.no
 alias kgoom="kgp --output=jsonpath='{ range .items[*]}{.status.containerStatuses[*].name}    {.status.containerStatuses[*].lastState.terminated.reason }    {.status.containerStatuses[*].lastState.terminated.finishedAt}{\"\n\"}{end}' | grep OOMKilled"
 alias kgpv3='kgpv --sort-by=.spec.capacity.storage'
 alias kgpp='kgp -l app.kubernetes.io/instance=prometheus-prometheus -owide' 
+alias kgpk='kgp -l app.kubernetes.io/name=kafka -owide' 
 
 # KUBERNETES - get resource
 alias kgp='k get po'
@@ -324,7 +325,7 @@ alias ktn2='k top no | sort --key 5 --numeric'
 
 # KUBERNETES - resource-capacity commands
 alias krn='k resource-capacity -u'
-alias krng='k resource-capacity -u | grec $1'
+alias krng='k resource-capacity -u | grep $1'
 alias krn1='k resource-capacity -u --sort cpu.util.percentage'
 alias krn2='k resource-capacity -u --sort mem.util.percentage'
 alias krp='k resource-capacity -p -u'
