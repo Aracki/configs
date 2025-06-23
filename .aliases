@@ -85,6 +85,7 @@ alias kgoom="kgp --output=jsonpath='{ range .items[*]}{.status.containerStatuses
 alias kgpv3='kgpv --sort-by=.spec.capacity.storage'
 alias kgpp='kgp -l app.kubernetes.io/instance=prometheus-prometheus -owide' 
 alias kgpk='kgp -l app.kubernetes.io/name=kafka -owide' 
+alias kgpw='k klock po'
 
 # KUBERNETES - get resource
 alias kgp='k get po'
@@ -322,6 +323,9 @@ alias ktn='k top no'
 alias ktng='k top no | grep $1'
 alias ktn1='k top no | sort --key 3 --numeric'
 alias ktn2='k top no | sort --key 5 --numeric'
+
+alias knra='k node-resource allocation'
+alias knru='k node-resource utilization' 
 
 # KUBERNETES - resource-capacity commands
 alias krn='k resource-capacity -u'
