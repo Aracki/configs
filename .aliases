@@ -324,6 +324,7 @@ alias ktng='k top no | grep $1'
 alias ktn1='k top no | sort --key 3 --numeric'
 alias ktn2='k top no | sort --key 5 --numeric'
 
+# KUBERNETES - node-resource commands
 alias knra='k node-resource allocation'
 alias knru='k node-resource utilization' 
 
