@@ -55,7 +55,8 @@ alias dsp='docker system prune'
 alias dis='docker images --format '{{.Size}}\t{{.Repository}}' | sort -r'
 alias dn='docker network ls'
 alias dv='docker volume ls'
-alias dc="docker-compose"
+alias dc='docker-compose'
+alias ld='lazydocker'
 
 # KUBERNETES - basic
 alias k='kubectl'
@@ -85,7 +86,7 @@ alias kgoom="kgp --output=jsonpath='{ range .items[*]}{.status.containerStatuses
 alias kgpv3='kgpv --sort-by=.spec.capacity.storage'
 alias kgpp='kgp -l app.kubernetes.io/instance=prometheus-prometheus -owide' 
 alias kgpk='kgp -l app.kubernetes.io/name=kafka -owide' 
-alias kgpw='k klock po'
+alias kgpw='k klock po -owide'
 
 # KUBERNETES - get resource
 alias kgp='k get po'
