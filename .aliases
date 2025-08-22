@@ -360,3 +360,7 @@ function ktpn --argument node_name
     end
 end
 
+function alerts
+    http $THANOS_URL/api/v1/rules \
+    | jq -r '.data.groups[].rules[] | select(.query) | "\(.name)"'
+end
