@@ -39,6 +39,7 @@ alias g1='git log -1'
 alias gl="git log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'"
 alias gll='git log --stat --abbrev-commit'
 alias gld='git log --pretty=format:%cd --date=short | uniq -c'
+alias gpl='git pull'
 alias gplom='git pull origin master'
 alias grb='git fetch origin && git rebase origin master'
 alias gm='git checkout master; git reset --hard origin/master; gplom'
@@ -361,6 +362,27 @@ function ktpn --argument node_name
 end
 
 function alerts
-    http $THANOS_URL/api/v1/rules \
-    | jq -r '.data.groups[].rules[] | select(.query) | "\(.name)"'
+    if test (count $argv) -eq 0
+        # No argument → list all alert names
+        http $THANOS_URL/api/v1/rules \
+        | jq -r '.data.groups[].rules[] | select(.query) | "\(.name)"'
+    else
+        # Argument passed → filter alerts by argument and show name + query
+        curl -s $THANOS_URL/api/v1/rules \
+        | jq -r '.data.groups[].rules[] | select(.type=="alerting") | "\(.name): \(.query)"' \
+        | rg $argv[1]
+    end
+end
+
+function alerts1
+
+    # Argument passed → filter alerts by argument and show name + query + labels
+    set alert_name $argv[1]
+
+    curl -s $THANOS_URL/api/v1/rules \
+    | jq --arg name "$alert_name" '
+        .data.groups[].rules[]
+        | select(.type=="alerting")
+        | select(.name | test($name))
+        | {name: .name, query: .query, labels: .labels}'
 end
