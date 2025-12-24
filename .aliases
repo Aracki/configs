@@ -28,6 +28,12 @@ alias dust='dust -r -z1000000'
 alias rgg='vim $(rg . | fzf | cut -d ":" -f 1)'
 alias tt='thanos tools'
 
+# Stern aliases
+alias s='stern'
+alias sr='stern -oraw'
+alias sj='stern -ojson'
+alias si='stern $1 -i $2'
+
 # GIT
 alias gs='git status'
 alias dif='git diff'
@@ -75,7 +81,7 @@ alias dp='describepod'
 alias tp='tailpod'
 alias ep='execpod'
 alias kpf='k port-forward'
-alias kvs='k view-secret'
+alias kvs='k view-secret -a'
 alias rbac='rbac-lookup'
 alias kbox='k run kbox --image=jcortejoso/wscat -i --tty --attach --rm'
 alias am='amtool'
@@ -115,7 +121,7 @@ alias kgpv='k get pv'
 alias kgpvc='k get pvc'
 alias kgn='k get no'
 alias kgpdb='k get pdb'
-alias kgep='k get ep'
+alias kgep='k get endpointslices'
 alias kgj='k get job'
 alias kgcj='k get cj'
 alias kgmci='k get mci'
@@ -153,7 +159,7 @@ alias kgpv1='k get pv --sort-by=.metadata.creationTimestamp'
 alias kgpvc1='k get pvc --sort-by=.metadata.creationTimestamp'
 alias kgn1='k get no --sort-by=.metadata.creationTimestamp'
 alias kgpdb1='k get pdb --sort-by=.metadata.creationTimestamp'
-alias kgep1='k get ep --sort-by=.metadata.creationTimestamp'
+alias kgep1='k get endpointslices --sort-by=.metadata.creationTimestamp'
 alias kgj1='k get job --sort-by=.metadata.creationTimestamp'
 alias kgcj1='k get cj --sort-by=.metadata.creationTimestamp'
 alias kgmci1='k get mci --sort-by=.metadata.creationTimestamp'
@@ -190,7 +196,7 @@ alias kgchallenge2='k neat get challenge'
 alias kgpv2='k neat get pv'
 alias kgpvc2='k neat get pvc'
 alias kgpdb2='k neat get pdb'
-alias kgep2='k neat get ep'
+alias kgep2='k neat get endpointslices'
 alias kgj2='k neat get job'
 alias kgcj2='k neat get cj'
 alias kgmci2='k neat get mci'
@@ -228,7 +234,7 @@ alias kgpvg='kgpv|grep $1'
 alias kgpvcg='kgpvc|grep $1'
 alias kgng='kgn|grep $1'
 alias kgpdbg='kgpdb|grep $1'
-alias kgepg='k get ep|grep $1'
+alias kgepg='kgep|grep $1'
 alias kgjg='k get job|grep $1'
 alias kgcjg='k get cj|grep $1'
 alias kgmcig='k get mci|grep $1'
@@ -265,7 +271,7 @@ function kgpv3; k neat get pv $argv | vim -; end
 function kgpvc3; k neat get pvc $argv | vim -; end
 function kgn3; k neat get no $argv | vim -; end
 function kgpdb3; k neat get pdb $argv | vim -; end
-function kgep3; k neat get ep $argv | vim -; end
+function kgep3; k neat get endpointslices $argv | vim -; end
 function kgj3; k neat get job $argv | vim -; end
 function kgcj3; k neat get cj $argv | vim -; end
 function kgmci3; k neat get mci $argv | vim -; end
@@ -384,5 +390,5 @@ function alerts1
         .data.groups[].rules[]
         | select(.type=="alerting")
         | select(.name | test($name))
-        | {name: .name, query: .query, labels: .labels}'
+        | {name: .name, query: .query, labels: .labels, for_in_seconds: .duration}'
 end
