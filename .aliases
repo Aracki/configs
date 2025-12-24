@@ -392,3 +392,22 @@ function alerts1
         | select(.name | test($name))
         | {name: .name, query: .query, labels: .labels, for_in_seconds: .duration}'
 end
+
+function ktcp --description 'Run kubectl gadget top_tcp for a pod'
+    set -l pod_name $argv[1]
+
+    if test -z "$pod_name"
+        echo "Usage: ktcp <pod-name>"
+        return 1
+    end
+
+    # Strip trailing -N (where N is a number) for container name
+    set -l container_name (string replace -r -- '-[0-9]+$' '' $pod_name)
+
+    kubectl gadget run top_tcp:latest \
+        -p $pod_name \
+        -c $container_name-envoy \
+        -n projectnode \
+        -F "src.endpoint==p/projectnode/$pod_name:8800,dst.endpoint!~ingress" \
+        --fields src,dst,comm,sent,received
+end
