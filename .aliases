@@ -10,7 +10,7 @@ alias h="history --show-time='%d.%h - %H:%M:%S '"
 alias a='bat'
 alias r='ranger'
 alias l='ls -lrthp'
-alias tre='exa --long --tree --color-scale'
+alias tre='eza --long --tree'
 alias grid='exa --recurse -L 2 -l --grid'
 alias ap='ansible-playbook'
 alias tf='terraform'
@@ -27,6 +27,7 @@ alias duf='duf -hide special'
 alias dust='dust -r -z1000000'
 alias rgg='vim $(rg . | fzf | cut -d ":" -f 1)'
 alias tt='thanos tools'
+alias c='claude'
 
 # Stern aliases
 alias s='stern'
@@ -404,10 +405,33 @@ function ktcp --description 'Run kubectl gadget top_tcp for a pod'
     # Strip trailing -N (where N is a number) for container name
     set -l container_name (string replace -r -- '-[0-9]+$' '' $pod_name)
 
+    # Build and display the command
+    echo "Running: kubectl gadget run top_tcp:latest -p $pod_name -c $container_name-envoy -n projectnode -F 'src.endpoint==p/projectnode/$pod_name:8800,dst.endpoint!~ingress' --fields src,dst,comm,sent,received"
+    echo ""
+
     kubectl gadget run top_tcp:latest \
         -p $pod_name \
         -c $container_name-envoy \
         -n projectnode \
         -F "src.endpoint==p/projectnode/$pod_name:8800,dst.endpoint!~ingress" \
         --fields src,dst,comm,sent,received
+end
+
+function ktcp1 --description 'Run kubectl gadget top_tcp for a pod'
+    set -l pod_name $argv[1]
+
+    if test -z "$pod_name"
+        echo "Usage: ktcp <pod-name>"
+        return 1
+    end
+
+    # Strip trailing -N (where N is a number) for container name
+    set -l container_name (string replace -r -- '-[0-9]+$' '' $pod_name)
+
+    # Build and display the command
+    echo "Running: kubectl gadget run trace_tcp:latest -p $pod_name"
+    echo ""
+
+    kubectl gadget run trace_tcp:latest \
+        -p $pod_name
 end
