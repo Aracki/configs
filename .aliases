@@ -29,12 +29,6 @@ alias rgg='vim $(rg . | fzf | cut -d ":" -f 1)'
 alias tt='thanos tools'
 alias c='claude'
 
-# Stern aliases
-alias s='stern'
-alias sr='stern -oraw'
-alias sj='stern -ojson'
-alias si='stern $1 -i $2'
-
 # GIT
 alias gs='git status'
 alias dif='git diff'
@@ -435,3 +429,21 @@ function ktcp1 --description 'Run kubectl gadget top_tcp for a pod'
     kubectl gadget run trace_tcp:latest \
         -p $pod_name
 end
+
+# --- STERN helper functions --- #
+function s --description 'Run stern command but pipe to tailspin'
+    stern $argv | tspin
+end
+function sr --description 'Run stern command but pipe to tailspin'
+    stern $argv -oraw | tspin
+end
+function sri --description 'Run stern command but pipe to tailspin'
+    stern $argv[1] -oraw -i $argv[2] | tspin
+end
+function sj --description 'Run stern command but pipe to tailspin'
+    stern $argv -ojson | tspin
+end
+function si --description 'Run stern command but pipe to tailspin'
+    stern $argv[1] -i $argv[2] | tspin
+end
+# ------------------------------ #
