@@ -2,9 +2,9 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
-. ~/.aliases-private
 . ~/.aliases
-. ~/.servers
+. ~/.aliases-private
+. ~/.aliases-private-functions
 
 export GOPATH=/Users/raca/go
 export HOMEBREW_NO_AUTO_UPDATE=1
@@ -12,6 +12,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 set PATH /opt/homebrew/bin $PATH
 set PATH $PATH $HOME/.krew/bin
 set PATH $PATH /opt/homebrew/opt/libpq/bin:$PATH
+set PATH $PATH $HOME/tenderly/tenderly-system/apps/proverator
 
 [ -f /opt/homebrew/share/autojump/autojump.fish ]; and source /opt/homebrew/share/autojump/autojump.fish
 
@@ -31,3 +32,9 @@ end
 function h --wraps=history\ --show-time=\'\%d.\%h\ -\ \%H:\%M:\%S\ \' --description alias\ h=history\ --show-time=\'\%d.\%h\ -\ \%H:\%M:\%S\ \'
   history --show-time='%d.%h.%y - %H:%M:%S ' $argv
 end
+
+function kdf
+    set -lx KUBECTL_EXTERNAL_DIFF "colordiff -N -u"
+    kubectl diff -f $argv
+end
+alias kdif='kdf'
