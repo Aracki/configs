@@ -22,7 +22,6 @@ alias ld='linkerd'
 alias publicip='curl ipinfo.io/ip'
 alias privateip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
 alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
-alias dig='dig +short'
 alias duf='duf -hide special'
 alias dust='dust -r -z1000000'
 alias rgg='vim $(rg . | fzf | cut -d ":" -f 1)'
@@ -66,7 +65,6 @@ alias ktx='kubectx'
 alias kx='ktx -'
 alias kns='kubens'
 alias kap='k apply -f'
-alias kdif="KUBECTL_EXTERNAL_DIFF='colordiff -N -u' kubectl diff -f"
 alias kall='k get -A'
 alias kgc='k get pod -o="custom-columns=NAME:.metadata.name,INIT-CONTAINERS:.spec.initContainers[*].name,CONTAINERS:.spec.containers[*].name"'
 alias kgcg='k get pod -o="custom-columns=NAME:.metadata.name,INIT-CONTAINERS:.spec.initContainers[*].name,CONTAINERS:.spec.containers[*].name"|grep $1'
@@ -190,6 +188,7 @@ alias kgorder2='k neat get order'
 alias kgchallenge2='k neat get challenge'
 alias kgpv2='k neat get pv'
 alias kgpvc2='k neat get pvc'
+alias kgn2='k neat get node'
 alias kgpdb2='k neat get pdb'
 alias kgep2='k neat get endpointslices'
 alias kgj2='k neat get job'
@@ -439,6 +438,9 @@ function sr --description 'Run stern command but pipe to tailspin'
 end
 function sri --description 'Run stern command but pipe to tailspin'
     stern $argv[1] -oraw -i $argv[2] | tspin
+end
+function src --description 'Run stern command but pipe to tailspin'
+    stern $argv[1] -oraw -c $argv[2] | tspin
 end
 function sj --description 'Run stern command but pipe to tailspin'
     stern $argv -ojson | tspin
