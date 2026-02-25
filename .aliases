@@ -365,12 +365,12 @@ function alerts
     if test (count $argv) -eq 0
         # No argument → list all alert names
         http $THANOS_URL/api/v1/rules \
-        | jq -r '.data.groups[].rules[] | select(.query) | "\(.name)"'
+        | jq -r '.data.groups[].rules[] | select(.type=="alerting") | "\(.name)"'
     else
         # Argument passed → filter alerts by argument and show name + query
         curl -s $THANOS_URL/api/v1/rules \
         | jq -r '.data.groups[].rules[] | select(.type=="alerting") | "\(.name): \(.query)"' \
-        | rg $argv[1]
+        | rg -i $argv[1]
     end
 end
 
@@ -383,8 +383,22 @@ function alerts1
     | jq --arg name "$alert_name" '
         .data.groups[].rules[]
         | select(.type=="alerting")
-        | select(.name | test($name))
+        | select(.name | test($name; "i"))
         | {name: .name, query: .query, labels: .labels, for_in_seconds: .duration}'
+end
+
+function alerts2
+  set query '.data.groups[].rules[] | select(.type=="alerting") | "| \(.name) | \(.labels.severity // "none") | \(.annotations.description // .annotations.summary // "") |"'
+
+  if test (count $argv) -eq 0
+      echo "| name | severity | description |"
+      echo "|------|----------|-------------|"
+      http $THANOS_URL/api/v1/rules | jq -r $query
+  else
+      echo "| name | severity | description |"
+      echo "|------|----------|-------------|"
+      http $THANOS_URL/api/v1/rules | jq -r $query | rg -iF $argv[1]
+  end
 end
 
 function ktcp --description 'Run kubectl gadget top_tcp for a pod'
