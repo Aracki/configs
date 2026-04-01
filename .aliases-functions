@@ -28,7 +28,6 @@ function alerts
 end
 
 function alerts1
-
     # Argument passed → filter alerts by argument and show name + query + labels
     set alert_name $argv[1]
 
@@ -52,130 +51,6 @@ function alerts2
       echo "|------|----------|-------------|"
       http $THANOS_URL/api/v1/rules | jq -r $query | rg -iF $argv[1]
   end
-end
-
-function ktcp --description 'Run kubectl gadget top_tcp (generic, verbose dst, namespace-aware)'
-  if test -z "$argv[1]"
-      echo "Usage: ktcp <pod-name> [extra kubectl-gadget args...]"
-      return 1
-  end
-
-  set -l pod_name $argv[1]
-  set -l extra $argv[2..-1]
-
-  # Warn if current namespace has no matching pods
-  set -l ns (kubectl config view --minify -o jsonpath='{.contexts[0].context.namespace}' 2>/dev/null)
-  if test -z "$ns"
-      set ns default
-  end
-  set -l pod_check (kubectl get pod $pod_name -n $ns --no-headers 2>&1)
-  if string match -q "*NotFound*" -- $pod_check; or string match -q "*not found*" -- $pod_check
-      echo "⚠  WARNING: pod '$pod_name' not found in namespace '$ns'"
-      echo "   Are you in the right namespace/context?"
-      echo ""
-      return 1
-  end
-
-  kubectl gadget run top_tcp:latest \
-      -p $pod_name \
-      --fields src.endpoint,dst.endpoint,comm,sent,received \
-      --annotate 'tcp.dst.endpoint:columns.maxWidth=64' \
-      --annotate 'tcp.src.endpoint:columns.maxWidth=64' \
-      $extra
-end
-
-function ktcp1 --description 'Run kubectl gadget top_tcp for a pod (blockchain nodes)'
-    set -l pod_name $argv[1]
-
-    if test -z "$pod_name"
-        echo "Usage: ktcp1 <pod-name>"
-        return 1
-    end
-
-    # Warn if pod not found in projectnode namespace
-    set -l pod_check (kubectl get pod $pod_name -n projectnode --no-headers 2>&1)
-    if string match -q "*NotFound*" -- $pod_check; or string match -q "*not found*" -- $pod_check
-        set -l ctx (kubectl config current-context 2>/dev/null; or echo "unknown")
-        echo "⚠  WARNING: pod '$pod_name' not found in namespace 'projectnode' (context: $ctx)"
-        echo "   Are you in the right context?"
-        echo ""
-        return 1
-    end
-
-    # Strip trailing -N (where N is a number) for container name
-    set -l container_name (string replace -r -- '-[0-9]+$' '' $pod_name)
-
-    # Build and display the command
-    echo "Running: kubectl gadget run top_tcp:latest -p $pod_name -c $container_name-envoy -n projectnode -F 'src.endpoint==p/projectnode/$pod_name:8800,dst.endpoint!~ingress' --fields src,dst,comm,sent,received"
-    echo ""
-
-    kubectl gadget run top_tcp:latest \
-        -p $pod_name \
-        -c $container_name-envoy \
-        -n projectnode \
-        -F "src.endpoint==p/projectnode/$pod_name:8800,dst.endpoint!~ingress" \
-        --fields src,dst,comm,sent,received
-end
-
-function knetstat --description 'Show connections in a pod grouped by remote'
-  if test -z "$argv[1]"
-    echo "Usage: knetstat <pod-name> [extra args...]"
-    return 1
-  end
-
-  set -l pod $argv[1]
-  set -l extra $argv[2..-1]
-
-  kubectl exec $pod $extra -- cat /proc/net/tcp | awk '
-    function hex2dec(h,    i, v, c) {
-      v = 0; h = toupper(h)
-      for (i = 1; i <= length(h); i++) {
-        c = index("0123456789ABCDEF", substr(h, i, 1)) - 1
-        v = v * 16 + c
-      }
-      return v
-    }
-    function decode_addr(s,    hex_ip, hex_port, a, b, c, d) {
-      split(s, parts, ":")
-      hex_ip = parts[1]; hex_port = parts[2]
-      a = hex2dec(substr(hex_ip, 7, 2))
-      b = hex2dec(substr(hex_ip, 5, 2))
-      c = hex2dec(substr(hex_ip, 3, 2))
-      d = hex2dec(substr(hex_ip, 1, 2))
-      return a "." b "." c "." d ":" hex2dec(hex_port)
-    }
-    function state_name(st,    n, names) {
-      split("ESTABLISHED SYN_SENT SYN_RECV FIN_WAIT1 FIN_WAIT2 TIME_WAIT CLOSE CLOSE_WAIT LAST_ACK LISTEN CLOSING", names, " ")
-      n = hex2dec(st)
-      return (n >= 1 && n <= 11) ? names[n] : st
-    }
-    NR == 1 { next }
-    {
-      remote = decode_addr($3)
-      state = state_name($4)
-      key = remote " " state
-      count[key]++
-    }
-    END {
-      n = 0
-      for (k in count) {
-        n++
-        keys[n] = k
-        vals[n] = count[k]
-      }
-      for (i = 1; i <= n; i++)
-        for (j = i+1; j <= n; j++)
-          if (vals[j] > vals[i]) {
-            tmp = keys[i]; keys[i] = keys[j]; keys[j] = tmp
-            tmp = vals[i]; vals[i] = vals[j]; vals[j] = tmp
-          }
-      printf "%-22s %-14s %s\n", "REMOTE", "STATE", "COUNT"
-      for (i = 1; i <= n; i++) {
-        split(keys[i], parts, " ")
-        printf "%-22s %-14s %d\n", parts[1], parts[2], vals[i]
-      }
-    }
-  '
 end
 
 # --- STERN helper functions --- #
