@@ -1,3 +1,27 @@
+function gpl --wraps='git pull' --description 'git pull: fast-forward only, fall back to no-ff merge if diverged'
+    git pull --ff-only $argv
+    or git pull --no-ff $argv
+end
+
+function gm --description 'Checkout default branch (master, else main), hard reset to origin, and pull'
+    set -l branch master
+    if not git show-ref --verify --quiet refs/heads/master; and not git show-ref --verify --quiet refs/remotes/origin/master
+        set branch main
+    end
+    git checkout $branch
+    and git reset --hard origin/$branch
+    and git pull origin $branch
+end
+
+function gc --wraps='git checkout' --description 'git checkout: create the branch with -b if it does not exist, plain checkout if it does'
+    set -l branch $argv[1]
+    if test -z "$branch"; or git show-ref --verify --quiet refs/heads/$branch; or git show-ref --verify --quiet refs/remotes/origin/$branch
+        git checkout $argv
+    else
+        git checkout -b $argv
+    end
+end
+
 function kdbg
     kubectl debug -it $argv[1] --image nicolaka/netshoot -- /bin/bash
 end
@@ -14,44 +38,39 @@ function ktpn --argument node_name
     end
 end
 
-function alerts
-    if test (count $argv) -eq 0
-        # No argument → list all alert names
-        http $THANOS_URL/api/v1/rules \
-        | jq -r '.data.groups[].rules[] | select(.type=="alerting") | "\(.name)"'
-    else
-        # Argument passed → filter alerts by argument and show name + query
-        curl -s $THANOS_URL/api/v1/rules \
-        | jq -r '.data.groups[].rules[] | select(.type=="alerting") | "\(.name): \(.query)"' \
-        | rg -i $argv[1]
-    end
+# --- ARGOCD helper functions --- #
+
+function appset --description 'List Argo CD ApplicationSets as a table (name, generators, app count, age, conditions)'
+    argocd appset list -o json | jq -r '
+      def age:
+        (now - (.metadata.creationTimestamp | fromdateiso8601)) as $s
+        | if $s >= 86400 then "\(($s / 86400) | floor)d"
+          elif $s >= 3600 then "\(($s / 3600) | floor)h"
+          elif $s >= 60 then "\(($s / 60) | floor)m"
+          else "\($s | floor)s"
+          end;
+
+      ["NAME","GENERATORS","APP_COUNT","AGE","CONDITIONS"],
+      (.[] | [
+        .metadata.name,
+        ([.spec.generators[] | keys[]] | unique | join(",")),
+        ((.status.resources // []) | length | tostring),
+        age,
+        ((.status.conditions // []) |
+          map(
+            select(
+              (.type == "ErrorOccurred" and .status == "True")
+              or
+              (.type != "ErrorOccurred" and .status == "False")
+            )
+            | "\(.type):\(.reason // "")"
+          ) |
+          join(",")
+        )
+      ]) | @tsv
+    ' | column -t
 end
-
-function alerts1
-    # Argument passed → filter alerts by argument and show name + query + labels
-    set alert_name $argv[1]
-
-    curl -s $THANOS_URL/api/v1/rules \
-    | jq --arg name "$alert_name" '
-        .data.groups[].rules[]
-        | select(.type=="alerting")
-        | select(.name | test($name; "i"))
-        | {name: .name, query: .query, labels: .labels, for_in_seconds: .duration}'
-end
-
-function alerts2
-  set query '.data.groups[].rules[] | select(.type=="alerting") | "| \(.name) | \(.labels.severity // "none") | \(.annotations.description // .annotations.summary // "") |"'
-
-  if test (count $argv) -eq 0
-      echo "| name | severity | description |"
-      echo "|------|----------|-------------|"
-      http $THANOS_URL/api/v1/rules | jq -r $query
-  else
-      echo "| name | severity | description |"
-      echo "|------|----------|-------------|"
-      http $THANOS_URL/api/v1/rules | jq -r $query | rg -iF $argv[1]
-  end
-end
+# -------------------------------- #
 
 # --- STERN helper functions --- #
 function s --description 'Run stern command but pipe to tailspin'
@@ -63,6 +82,9 @@ end
 function sri --description 'Run stern command but pipe to tailspin'
     stern $argv[1] -oraw -i $argv[2] | tspin
 end
+function sre --description 'Run stern, exclude log lines by regex, then tailspin (grep -v before colors)'
+    stern $argv[1] -oraw -e $argv[2] | tspin
+end
 function src --description 'Run stern command but pipe to tailspin'
     stern $argv[1] -oraw -c $argv[2] | tspin
 end
@@ -73,3 +95,48 @@ function si --description 'Run stern command but pipe to tailspin'
     stern $argv[1] -i $argv[2] | tspin
 end
 # ------------------------------ #
+
+# --- KUBERNETES gadget top_tcp helper functions --- #
+function ktcp --description 'Run kubectl gadget top_tcp (generic for a pod)'
+  if test -z "$argv[1]"
+      echo "Usage: ktcp <pod-name> [extra kubectl-gadget args...]"
+      return 1
+  end
+
+  set -l pod_name $argv[1]
+  set -l extra $argv[2..-1]
+
+  # Warn if current namespace has no matching pods
+  set -l ns (kubectl config view --minify -o jsonpath='{.contexts[0].context.namespace}' 2>/dev/null)
+  if test -z "$ns"
+      set ns default
+  end
+  set -l pod_check (kubectl get pod $pod_name -n $ns --no-headers 2>&1)
+  if string match -q "*NotFound*" -- $pod_check; or string match -q "*not found*" -- $pod_check
+      echo "⚠  WARNING: pod '$pod_name' not found in namespace '$ns'"
+      echo "   Are you in the right namespace/context?"
+      echo ""
+      return 1
+  end
+
+  kubectl gadget run top_tcp:latest \
+      -p $pod_name \
+      --fields src.endpoint,dst.endpoint,comm,sent,received \
+      --annotate 'tcp.dst.endpoint:columns.maxWidth=64' \
+      --annotate 'tcp.src.endpoint:columns.maxWidth=64' \
+      $extra
+end
+
+# ----------------------------------------------------- #
+
+function kall --description 'kubectl get -A; "sm" expands to servicemonitor'
+    set -l args $argv
+    test "$args[1]" = sm; and set args[1] servicemonitor
+    kubectl get -A $args
+end
+
+function ke --description 'kubectl edit; "sm" expands to servicemonitor'
+    set -l args $argv
+    test "$args[1]" = sm; and set args[1] servicemonitor
+    kubectl edit $args
+end
